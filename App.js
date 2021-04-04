@@ -11,12 +11,8 @@ const state = [
   {title: 'test3', id: '3'},
 ];
 const App = () => {
-  const [todoId, setTodoId] = useState('2');
-  const [todos, setTodo] = useState([
-    {title: 'test1', id: '1'},
-    {title: 'test2', id: '2'},
-    {title: 'test3', id: '3'},
-  ]);
+  const [todoId, setTodoId] = useState(null);
+  const [todos, setTodo] = useState([{title: 'test1', id: '1'}]);
 
   const addTodo = (title) => {
     if (title.trim()) {
@@ -51,6 +47,17 @@ const App = () => {
     );
   };
 
+  const updateTodo = (id, title) => {
+    setTodo((old) =>
+      old.map((todo) => {
+        if (todo.id === id) {
+          todo.title = title;
+        }
+        return todo;
+      }),
+    );
+  };
+
   let content = (
     <MainScreen
       addTodo={addTodo}
@@ -67,6 +74,7 @@ const App = () => {
         goBack={() => setTodoId(null)}
         onRemove={removeTodo}
         todo={selectedTodo}
+        onSave={updateTodo}
       />
     );
   }

@@ -1,8 +1,22 @@
-import React from 'react';
-import {Text, View, StyleSheet, Modal, TextInput, Button} from 'react-native';
+import React, {useState} from 'react';
+import {Button, Modal, StyleSheet, TextInput, View, Alert} from 'react-native';
 import {THEME} from '../theme';
 
-export const EditModal = ({visible, onCancel}) => {
+export const EditModal = ({visible, onCancel, value, onSave}) => {
+  const [title, setTitle] = useState(value);
+
+  const saveHandler = () => {
+    if (title.trim().length < 3) {
+      Alert.alert(
+        'Error',
+        `Minimal title name must be 3 letters. Now you have ${
+          title.trim().length
+        } symbols`,
+      );
+    } else {
+      onSave(title);
+    }
+  };
   return (
     <Modal transparent={false} animationType="slide" visible={visible}>
       <View style={styles.wrap}>
@@ -12,6 +26,8 @@ export const EditModal = ({visible, onCancel}) => {
           autoCapitalize="none"
           autoCorrect={false}
           maxLength={64}
+          value={title}
+          onChangeText={setTitle}
         />
         <View style={styles.buttons}>
           <View style={styles.button}>
@@ -22,7 +38,7 @@ export const EditModal = ({visible, onCancel}) => {
             />
           </View>
           <View style={styles.button}>
-            <Button title="Save" />
+            <Button title="Save" onPress={saveHandler} />
           </View>
         </View>
       </View>
